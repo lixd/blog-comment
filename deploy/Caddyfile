@@ -4,10 +4,10 @@
 	admin off
 	grace_period 1m
 }
-#lixueduan.com {
-#	redir https://www.lixueduan.com{uri}
-#}
-blog.lixueduan.com {
+lixueduan.com {
+	redir https://www.lixueduan.com{uri}
+}
+www.lixueduan.com {
 	tls 1033256636@qq.com
 	encode zstd gzip
 	root * /var/www/html/public
