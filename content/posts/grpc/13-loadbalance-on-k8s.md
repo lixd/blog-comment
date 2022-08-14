@@ -227,7 +227,7 @@ spec:
 
 client 请求中间组件，由中间组件再去请求后端的 Pod。
 
-常见的组件比如 [Linkerd](https://linkerd.io)，或者 ServiceMesh 如 [istio](https://istio.io/) 中的 [envoy](https://www.envoyproxy.io/) 也能实现同样的效果。
+常见的组件比如 [Linkerd](https://linkerd.io/)，或者 ServiceMesh 如 [istio](https://istio.io/) 中的 [envoy](https://www.envoyproxy.io/) 也能实现同样的效果。
 
 
 

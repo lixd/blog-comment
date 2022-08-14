@@ -8,8 +8,8 @@ User=www-data
 Group=www-data
 EnvironmentFile=/etc/caddy/caddy.env
 
-ExecStart=/usr/local/bin/caddy2 run --config /etc/caddy/Caddyfile
-ExecReload=/usr/local/bin/caddy2 reload --config /etc/caddy/Caddyfile
+ExecStart=/usr/local/bin/caddy run --config /etc/caddy/Caddyfile
+ExecReload=/usr/local/bin/caddy reload --config /etc/caddy/Caddyfile
 
 TimeoutStopSec=5s
 LimitNOFILE=1048576

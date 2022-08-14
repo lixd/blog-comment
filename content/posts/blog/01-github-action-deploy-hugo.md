@@ -1,23 +1,19 @@
 ---
 title: "基于 Github Action 自动构建 Hugo 博客"
-subtitle: ""
-date: 2022-06-11T15:58:26+08:00
-lastmod: 2022-06-11T15:58:26+08:00
-draft: false
 description: "基于 Github Action 自动构建 Hugo 博客"
-# images 是用于 Open Graph 的，也是填相对路径。
-images: [../../img/hexo.png]
-tags: [hugo]
-categories: [blog]
+date: 2022-06-11 22:00:00
+draft: false
+categories: ["Blog"]
+tags: [Hugo]
 ---
 
 本文主要记录了如何配置  Github Action 实现 Hugo 博客自动部署。
 
 <!--more-->
 
-> [GitHub Actions 快速入门](https://docs.github.com/cn/actions/quickstart)
->
-> [Hugo QuickStart](https://gohugo.io/getting-started/quick-start/)
+[GitHub Actions 快速入门](https://docs.github.com/cn/actions/quickstart)
+
+[hugo quick-start](https://gohugo.io/getting-started/quick-start/)
 
 
 
@@ -200,7 +196,7 @@ jobs:
 
 为了安全起见，敏感数据都通过 secrets 方式引用，需要在对应仓库中创建这些 secret。
 
-![](../../../img/blog/github-secret-config.png)
+![][github-secret-config]
 
 
 
@@ -216,12 +212,20 @@ git commit -m "test action"
 
 然后打开 github action 页面查看，可以看到已经在执行了
 
-![](../../../img/blog/github-actions.png)
+![][github-actions]
 
 点开可以查看执行日志
 
-![](../../../img/blog/github-action-detail.png)
+![][github-action-detail]
 
 
 
 到此，整个配置就完成了，具体细节可以参考 [这个仓库](https://github.com/lixd/lixd.github.io)
+
+
+
+[github-secret-config]:https://github.com/lixd/blog/raw/master/images/blogutil/github-secret-config.png
+
+[github-actions]:https://github.com/lixd/blog/raw/master/images/blogutil/github-actions.png
+
+[github-action-detail]:https://github.com/lixd/blog/raw/master/images/blogutil/github-action-detail.png
