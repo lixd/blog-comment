@@ -26,7 +26,7 @@ post = ""
 name = "文章"
 url = "/posts/"
 # 当你将鼠标悬停在此菜单链接上时, 将显示的标题
-title = ""
+title = "指月小筑"
 [[menu.main]]
 weight = 2
 identifier = "tags"
@@ -139,10 +139,10 @@ author = true
 since = 2018
 # ICP info only in China (HTML format is supported)
 # ICP 备案信息，仅在中国使用 (支持 HTML 格式)
-icp = "渝ICP备20005680号-1"
+icp = '<a rel="license external nofollow noopener noreffer" href="https://beian.miit.gov.cn/" target="_blank">渝ICP备20005680号-1</a>'
 # license info (HTML format is supported)
 # 许可协议信息 (支持 HTML 格式)
-license= ""
+license= '<a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>'
 
 # Section (all posts) page config
 # Section (所有文章) 页面配置
@@ -195,7 +195,7 @@ tileColor = "#da532c"
 # Search config
 # 搜索配置
 [params.search]
-enable = false
+enable = true
 # type of search engine ["lunr", "algolia"]
 # 搜索引擎的类型 ["lunr", "algolia"]
 type = "lunr"
@@ -237,7 +237,7 @@ enable = true
 gravatarEmail = ""
 # URL of avatar shown in home page
 # 主页显示头像的 URL
-avatarURL = ""
+avatarURL = "/img/avatar.png"
 # title shown in home page (HTML format is supported)
 # 主页显示的网站标题 (支持 HTML 格式)
 title = "意琦行的个人博客"
@@ -617,6 +617,15 @@ image = "/img/jinx.png"
 # 缩略图 URL
 thumbnailUrl = ""
 
+# AD config
+# 广告配置
+[params.ad]
+enable = true
+# Google AdSense
+[params.ad.google]
+# google AdSense id
+id = "ca-pub-7693630257897132"
+
 # Analytics config
 # 网站分析配置
 [params.analytics]
@@ -629,6 +638,9 @@ id = "G-FL23FNP7CM"
 # whether to anonymize IP
 # 是否匿名化用户 IP
 anonymizeIP = true
+# Baidu Analytics
+[params.analytics.baidu]
+id = "2765db46fe986fa867d3cb9e87afdd69"
 # Fathom Analytics
 [params.analytics.fathom]
 id = ""

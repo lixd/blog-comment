@@ -50,6 +50,7 @@ git@github.com:lixd/lixd.github.io.git
 ```bash
 git submodule update --init --recursive
 ```
+如果需要添加、更新或删除 submodule 的话，参考 [submodule 常用命令](./deploy/readme.md)
 
 至此，环境就 ok 了。
 
