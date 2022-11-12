@@ -33,8 +33,6 @@ $ hugo version
 hugo v0.100.2-d25cb2943fd94ecf781412aeff9682d5dc62e284+extended windows/amd64 BuildDate=2022-06-08T10:25:57Z VendorInfo=gohugoio
 ```
 
-
-
 **2）clone 此仓库**
 
 ```
@@ -54,8 +52,6 @@ git submodule update --init --recursive
 
 至此，环境就 ok 了。
 
-
-
 ## hugo 常用命令
 
 ```
@@ -63,6 +59,8 @@ git submodule update --init --recursive
 hugo version 
 # 本地运行
 hugo server
+# 本地运行 指定为 production 环境，默认为 development 环境，该环境下部分特性不会开启
+hugo serve -e production
 # 生成public文件
 hugo
 ```
