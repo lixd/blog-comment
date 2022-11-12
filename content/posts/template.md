@@ -7,9 +7,7 @@ categories: ["Go"]
 tags: ["Go"]
 ---
 
-draft: 表示是否草稿 为true则编译时不会编译该文章
-
-write here
+draft: 表示是否草稿 为 true 则编译时不会编译该文章
 
 前面写摘要
 
@@ -26,6 +24,8 @@ write here
 比如，这样配置
 
 ![jinx.png](../../img/jinx.png)
+
+> 具体要跳多少层级，加多少个 ../ 取决于当前 md 文件在什么层级。
 
 最终访问的 URL 为`http://localhost:1313/img/jinx.png`
 
@@ -56,3 +56,13 @@ posts
 访问的就是 /statics/img/linux/ssh/ssh-forward-issue.png
 
 ![](../../../img/linux/ssh/ssh-forward-issue.png)
+
+
+
+
+
+### emoji 表情
+
+在这里查看，点击即可复制，然后粘贴到 markdown 即可。
+
+https://hugoloveit.com/zh-cn/emoji-support/

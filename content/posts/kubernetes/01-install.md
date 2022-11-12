@@ -12,6 +12,8 @@ tags: ["Kubernetes"]
 <!--more-->
 
 > 本文创建于 2021.3.12，更新于 2022.5.28
+>
+> 推荐使用 KubeClipper 来创建 k8s 集群，一条命令搞定：[Kubernetes教程(十一)---使用 KubeClipper 通过一条命令快速创建 k8s 集群](https://www.lixueduan.com/posts/kubernetes/11-install-by-kubeclipper/)
 
 
 

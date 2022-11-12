@@ -107,11 +107,13 @@ services:
 整体目录结构如下所示：
 
 ```sh
-kafka
-├── docker-compose.yaml
+kafka/
 ├── kafka
+├── docker-compose.yaml
 └── zookeeper
 ```
+
+>  内部的 kafka 和 zookeeper 目录分别用于存放相关数据。
 
 
 
