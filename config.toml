@@ -640,7 +640,7 @@ id = "G-FL23FNP7CM"
 anonymizeIP = true
 # Baidu Analytics
 [params.analytics.baidu]
-id = "2765db46fe986fa867d3cb9e87afdd69"
+id = "4b7c98449a6edf8492a8f3404e6d06a0"
 # Fathom Analytics
 [params.analytics.fathom]
 id = ""
