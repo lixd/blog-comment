@@ -219,7 +219,7 @@ UnaryEcho:  hello world
 
 ## 4. StreamInterceptor
 
-流拦截器过程和一元拦截器有所不同，同样可以分为3个阶段：
+流拦截器过程和一元拦截器有所不同，不过同样可以分为3个阶段：
 
 * 1）预处理(pre-processing)
 * 2）调用RPC方法(invoking RPC method)
@@ -254,9 +254,19 @@ func (w *wrappedStream) SendMsg(m interface{}) error {
 	logger("Send a message (Type: %T) at %v", m, time.Now().Format(time.RFC3339))
 	return w.ClientStream.SendMsg(m)
 }
+
+// streamInterceptor 一个简单的 stream interceptor 示例。
+func streamInterceptor(ctx context.Context, desc *grpc.StreamDesc, cc *grpc.ClientConn, method string, streamer grpc.Streamer, opts ...grpc.CallOption) (grpc.ClientStream, error) {
+	s, err := streamer(ctx, desc, cc, method, opts...)
+	if err != nil {
+		return nil, err
+	}
+    // 返回的是自定义的封装过的 stream
+	return newWrappedStream(s), nil
+}
 ```
 
-连接时则通过 grpc.WithStreamInterceptor 指定要加载的拦截器。
+连接时则通过 `grpc.WithStreamInterceptor` 指定要加载的拦截器。
 
 ```go
 func main() {
@@ -304,9 +314,18 @@ func (w *wrappedStream) SendMsg(m interface{}) error {
 	logger("Send a message (Type: %T) at %v", m, time.Now().Format(time.RFC3339))
 	return w.ServerStream.SendMsg(m)
 }
+
+func streamInterceptor(srv interface{}, ss grpc.ServerStream, info *grpc.StreamServerInfo, handler grpc.StreamHandler) error {
+	// 包装 grpc.ServerStream 以替换 RecvMsg SendMsg这两个方法。
+	err := handler(srv, newWrappedStream(ss))
+	if err != nil {
+		logger("RPC failed with error %v", err)
+	}
+	return err
+}
 ```
 
-相似的，通过 函数指定要加载的拦截器。
+相似的，通过`grpc.StreamInterceptor`指定要加载的拦截器。
 
 ```go
 func main() {
