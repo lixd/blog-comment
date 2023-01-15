@@ -11,7 +11,15 @@ tags: ["Kubernetes"]
 
 <!--more-->
 
-之前写了一篇使用 kubeadm 创建集群的文章： [Kubernetes教程(一)---使用 kubeadm 创建 k8s 集群(containerd)](https://www.lixueduan.com/posts/kubernetes/01-install/)，整个流程下来其实还是比较麻烦的，体验并不是太好，今天给大家推荐一个优秀的开源项目：[KubeClipper ](https://github.com/kubeclipper-labs/kubeclipper)。
+>  2022-12-12，[KubeClipper](https://github.com/kubeclipper) 发布[ release-1.3.1](https://github.com/kubeclipper/kubeclipper/releases/tag/v1.3.1) 版本，本文也同步进行更新
+>
+>  **1.3.1 版本最大提升在于部署体验以及安装速度上的优化，同时一些错误提示也更加人性化，使用体验方便有较大提升**。
+>
+>  **部署参数大幅减少**：1.3.1 版本 aio 部署甚至不需要任何参数，kcctl deploy 即可完成部署，多节点部署也只需要提供两三个参数即可，较之前体验上有较大提升。
+>
+>  **集群安装速度大幅提升**：之前单节点集群需要 3 分钟，5节点高可用集群需要 9分钟，1.3.1 版本单节点只需要两分钟，5 节点也只需要4分钟。整个部署时间并不会随着节点增加而线性增加。
+
+之前写了一篇使用 kubeadm 创建集群的文章： [Kubernetes教程(一)---使用 kubeadm 创建 k8s 集群(containerd)](https://www.lixueduan.com/posts/kubernetes/01-install/)，整个流程下来其实还是比较麻烦的，体验并不是太好，今天给大家推荐一个优秀的开源项目：[KubeClipper ](https://github.com/kubeclipper/kubeclipper)。
 
 
 
@@ -29,7 +37,7 @@ KubeClipper 的 3个优势：
   * 提供在线、离线、代理方式部署以及多版本 K8S、CRI、CNI 选择
   * 提供了离线部署方式对**国内用户极为友好**，毕竟网络才是国内用户装 k8s 的一大难题。
 
-关于该项目的更多信息见：[Github Repo](https://github.com/kubeclipper-labs/kubeclipper) 以及官方的这篇介绍文章：[KubeClipper——轻量便捷的 Kubernetes 多集群全生命周期管理工具](https://mp.weixin.qq.com/s/RVUB5Pw6-A5zZAQktl8AcQ)
+关于该项目的更多信息见：[Github Repo](https://github.com/kubeclipper/kubeclipper) 以及官方的这篇介绍文章：[KubeClipper——轻量便捷的 Kubernetes 多集群全生命周期管理工具](https://mp.weixin.qq.com/s/RVUB5Pw6-A5zZAQktl8AcQ)
 
 一句话概括：**KubeClipper 是一个轻量便捷的 Kubernetes 多集群全生命周期管理工具**。
 
@@ -68,7 +76,7 @@ KubeClipper 本身并不会占用太多资源，但是为了后续更好的运�
 KubeClipper 提供了命令行工具🔧 kcctl，我们先安装 kcctl，安装命令如下：
 
 ```bash
-curl -sfL https://oss.kubeclipper.io/kcctl.sh | KC_REGION=cn bash -
+curl -sfL https://oss.kubeclipper.io/kcctl.sh | KC_REGION=cn VERSION=v1.3.1 bash -
 ```
 
 通过以下命令检测是否安装成功:
@@ -84,32 +92,10 @@ kcctl version
 然后使用 kcctl 安装 kubeclipper，一条命令即可,模板如下：
 
 ```bash
-kcctl deploy  [--user root] (--passwd SSH_PASSWD | --pk-file SSH_PRIVATE_KEY)
+kcctl deploy
 ```
 
-> 只需要提供 ssh user 以及 ssh passwd 或者 ssh 私钥即可在本机部署 KubeClipper。
-
-若使用 ssh passwd 方式则命令如下所示:
-
-```bash
-kcctl deploy --user root --passwd $SSH_PASSWD
-```
-
-私钥方式如下：
-
-```bash
-kcctl deploy --user root --pk-file $SSH_PRIVATE_KEY
-```
-
-本文使用密码进行部署，具体命令如下：
-
-```bash
-kcctl deploy --user root --passwd root
-```
-
-
-
-执行该命令后，Kcctl 将检查安装环境，若满足条件将会进入安装流程。在打印出如下的 KubeClipper banner 后即表示安装完成。
+kcctl 将检查安装环境，若满足条件则会在当前节点安装 kubeclipper，在打印出如下的 KubeClipper banner 后即表示安装完成。
 
 ```
  _   __      _          _____ _ _
@@ -122,9 +108,7 @@ kcctl deploy --user root --passwd root
                                  |_|   |_|
 ```
 
-
-
-> 安装过程中需要去阿里云下载离线安装包，速度有点慢(后续会优化)，需要大概 3分钟时间。
+> 安装过程中需要去阿里云下载离线安装包，大概 1 分钟即可下载完成。
 
 
 
@@ -157,23 +141,38 @@ kcctl login -H http://localhost -u admin -p Thinkbig1
 查看当前 agent 节点
 
 ```bash
-[root@iZbp12pyvyollw222dekjmZ ~]# kcctl get node
-+--------------------------------------+-------------------------+---------+----------------+-------------+-----+--------+
-|                  ID                  |        HOSTNAME         | REGION  |       IP       |   OS/ARCH   | CPU |  MEM   |
-+--------------------------------------+-------------------------+---------+----------------+-------------+-----+--------+
-| ca22ddb8-5a61-4ca3-87bd-91fa71080cb7 | kc-1 | default | 192.168.10.217 | linux/amd64 |   2 | 3646Mi |
-+--------------------------------------+-------------------------+---------+----------------+-------------+-----+--------+
+[root@iZbp1cz9txcv4n6uluew1jZ ~]# kcctl get node
++--------------------------------------+----------+---------+----------------+-------------+-----+--------+
+|                  ID                  | HOSTNAME | REGION  |       IP       |   OS/ARCH   | CPU |  MEM   |
++--------------------------------------+----------+---------+----------------+-------------+-----+--------+
+| f22d488f-af17-47cb-ab55-07f8c4cce5f0 | server1  | default | 172.20.175.140 | linux/amd64 |   2 | 3645Mi |
++--------------------------------------+----------+---------+----------------+-------------+-----+--------+
 
 ```
 
 然后使用以下命令创建 k8s 集群:
 
 ```bash
-# 其中 IP 为上一步中的 kc-1 节点 IP
-kcctl create cluster --name demo --master 192.168.10.217 --untaint-master
+# 其中 IP 为上一步中的 server1 节点 IP
+kcctl create cluster --name demo --master 172.20.175.140 --untaint-master
 ```
 
-大概 3 分钟左右即可完成集群创建,也可以使用以下命令查看集群状态
+大概两分钟左右即可完成集群创建,可以使用以下命令查看实时日志：
+
+```bash
+while true;
+do 
+logDir="/var/log/kc-agent";
+op=$(ll $logDir -t|grep -v total|head -n 1|awk '{print $9}');
+echo -e "\n当前操作 ID："$op;
+latestSteps=$(ll "$logDir/$op" -t|grep -v total|head -n 1|awk '{print $9}');
+echo -e "当前最新步骤："$latestSteps"\n";
+tail -n 20 "$logDir/$op/$latestSteps";
+sleep 3;
+done
+```
+
+或者使用以下命令查看集群状态
 
 ```bash
 kcctl get cluster -o yaml|grep status -A5
@@ -221,7 +220,7 @@ etcd-0               Healthy   {"health":"true","reason":""}
 > 为了和本教程保持一致，建议在其中的一台 server 节点上安装。
 
 ```bash
-curl -sfL https://oss.kubeclipper.io/kcctl.sh | KC_REGION=cn bash -
+curl -sfL https://oss.kubeclipper.io/kcctl.sh | KC_REGION=cn VERSION=v1.3.1 bash -
 ```
 
 
@@ -237,22 +236,26 @@ kcctl deploy  [--user root] (--passwd SSH_PASSWD | --pk-file SSH_PRIVATE_KEY) (-
 若使用 密码 方式则命令如下所示:
 
 ```bash
-kcctl deploy --user root --passwd $SSH_PASSWD --server SERVER_NODES --agent AGENT_NODES
+kcctl deploy --passwd $SSH_PASSWD --server SERVER_NODES --agent AGENT_NODES
 ```
 
 私钥 方式如下：
 
 ```bash
-kcctl deploy --user root --pk-file $SSH_PRIVATE_KEY --server SERVER_NODES --agent AGENT_NODES
+kcctl deploy --pk-file $SSH_PRIVATE_KEY --server SERVER_NODES --agent AGENT_NODES
 ```
 
 本教程使用 密码 方式进行部署，具体命令如下：
 
 ```bash
-kcctl deploy --server 192.168.10.217,192.168.10.196,192.168.10.136 --agent 192.168.10.58,192.168.10.225,192.168.10.19,192.168.10.27,192.168.10.4 --passwd root --pkg https://oss.kubeclipper.io/release/v1.1.0/kc-amd64.tar.gz
+# 3 个 server 节点，5 个 agent 节点，多个 IP 之间使用逗号分隔
+servers=172.20.175.140,172.20.175.142,172.20.175.146
+agents=172.20.175.145,172.20.175.143,172.20.175.144,172.20.175.139,172.20.175.141
+
+kcctl deploy --server $servers --agent $agents --passwd Thinkbig1
 ```
 
-> 3 个 server 节点，5 个 agent 节点，多个 IP 之间使用逗号`,`分隔
+
 
 同样的，在打印出如下的 KubeClipper banner 后即表示安装完成。
 
@@ -280,19 +283,17 @@ kcctl login -H http://localhost -u admin -p Thinkbig1
 然后查看一下当前的 agent 节点信息：
 
 ```bash
-[root@server-1 ~]# kcctl get node
+[root@server1 ~]# kcctl get node
 +--------------------------------------+----------+---------+----------------+-------------+-----+--------+
 |                  ID                  | HOSTNAME | REGION  |       IP       |   OS/ARCH   | CPU |  MEM   |
 +--------------------------------------+----------+---------+----------------+-------------+-----+--------+
-| ba6a5399-387f-4abd-a1b8-585e0094bf25 | agent-5  | default | 192.168.10.4   | linux/amd64 |   2 | 3938Mi |
-| 2c3bb128-0081-4efa-aced-9d5560a5aa63 | agent-4  | default | 192.168.10.27  | linux/amd64 |   2 | 3938Mi |
-| e5a79dbe-d872-4118-90f5-5d86bbf34392 | agent-3  | default | 192.168.10.19  | linux/amd64 |   2 | 3938Mi |
-| 74aed462-221c-4053-a897-e2166f805285 | agent-2  | default | 192.168.10.225 | linux/amd64 |   2 | 3938Mi |
-| c78a59a3-3907-4d2e-99df-5fc85560bd1d | agent-1  | default | 192.168.10.58  | linux/amd64 |   2 | 3938Mi |
+| a0e33d98-fd43-4e69-9700-3bc201b16a3b | agent1   | default | 172.20.175.145 | linux/amd64 |   2 | 3645Mi |
+| 4a62dc30-b1a5-42b3-87e2-373733e6ae71 | agent2   | default | 172.20.175.143 | linux/amd64 |   2 | 3645Mi |
+| b5a45667-38fd-4448-ad59-2c93bc049f37 | agent5   | default | 172.20.175.141 | linux/amd64 |   2 | 3645Mi |
+| 2f5a889a-8ee3-4f7d-9a41-ba55761c89bc | agent4   | default | 172.20.175.139 | linux/amd64 |   2 | 3645Mi |
+| ea9790f7-add6-4f96-997a-6ef1061b6907 | agent3   | default | 172.20.175.144 | linux/amd64 |   2 | 3645Mi |
 +--------------------------------------+----------+---------+----------------+-------------+-----+--------+
 ```
-
-
 
 接下来就可以使用 `kcctl create cluster` 命令创建集群了,命令模版如下：
 
@@ -305,18 +306,36 @@ kcctl create cluster (--name CLUSTER_NAME) (--master NODES) [--worker NODES][ --
 在本教程中，我们将 agent1、2、3 作为 master 节点，agent4、5作为 worker 节点，完整命令如下：
 
 ```bash
-kcctl create cluster --name demo --master 192.168.10.58,192.168.10.225,192.168.10.19 --worker 192.168.10.27,192.168.10.4
+masters=172.20.175.145,172.20.175.143,172.20.175.144
+workers=172.20.175.139,172.20.175.141
+
+kcctl create cluster --name demo --master $masters --worker $workers
 ```
 
+对于这样一个 5 节点的集群大概 3 到 4 分钟即可创建完成。
 
+可以 ssh 到第一个 master 节点对应的 agent 节点（即 agent1）使用以下命令查看实时日志：
 
-这样一个 5 节点的集群大概需要 5 分钟分钟左右可以完成创建,也可以使用以下命令查看集群状态
+```bash
+while true;
+do 
+logDir="/var/log/kc-agent";
+op=$(ll $logDir -t|grep -v total|head -n 1|awk '{print $9}');
+echo -e "\n当前操作 ID："$op;
+latestSteps=$(ll "$logDir/$op" -t|grep -v total|head -n 1|awk '{print $9}');
+echo -e "当前最新步骤："$latestSteps"\n";
+tail -n 20 "$logDir/$op/$latestSteps";
+sleep 3;
+done
+```
+
+或者使用以下命令查看集群状态
 
 ```bash
 kcctl get cluster -o yaml|grep status -A5
 ```
 
-> 您也可以进入控制台查看实时日志。
+> 也可以进入控制台查看**实时日志**。
 
 
 
@@ -325,19 +344,19 @@ kcctl get cluster -o yaml|grep status -A5
 **ssh 到任意 master 节点**上查看集群状态：
 
 ```bash
-[root@agent-1 ~]# kubectl get cs
+[root@agent1 ~]# kubectl get cs
 Warning: v1 ComponentStatus is deprecated in v1.19+
 NAME                 STATUS    MESSAGE                         ERROR
 scheduler            Healthy   ok                              
 controller-manager   Healthy   ok                              
-etcd-0               Healthy   {"health":"true","reason":""} 
-[root@agent-1 ~]# kubectl get node
-NAME      STATUS   ROLES                  AGE     VERSION
-agent-1   Ready    control-plane,master   6m41s   v1.23.6
-agent-2   Ready    control-plane,master   6m5s    v1.23.6
-agent-3   Ready    control-plane,master   6m14s   v1.23.6
-agent-4   Ready    <none>                 5m17s   v1.23.6
-agent-5   Ready    <none>                 5m18s   v1.23.6
+etcd-0               Healthy   {"health":"true","reason":""}   
+[root@agent1 ~]# kubectl get node
+NAME     STATUS   ROLES                  AGE     VERSION
+agent1   Ready    control-plane,master   3m38s   v1.23.6
+agent2   Ready    control-plane,master   3m13s   v1.23.6
+agent3   Ready    control-plane,master   3m12s   v1.23.6
+agent4   Ready    <none>                 2m18s   v1.23.6
+agent5   Ready    <none>                 2m17s   v1.23.6
 ```
 
 可以看到，5 节点都处于 Ready 状态，说明集群安装成功。
@@ -353,13 +372,14 @@ agent-5   Ready    <none>                 5m18s   v1.23.6
 * 1）安装 kcctl
 
 ```bash
-curl -sfL https://oss.kubeclipper.io/kcctl.sh | KC_REGION=cn bash -
+#不指定VERSION则默认安装master分支构建版本
+curl -sfL https://oss.kubeclipper.io/kcctl.sh | KC_REGION=cn VERSION=v1.3.1 bash -
 ```
 
 * 2）使用 kcctl 部署 kubeclipper
 
 ```bash
-kcctl deploy  [--user root] (--passwd SSH_PASSWD | --pk-file SSH_PRIVATE_KEY) (--server SERVER_NODES) (--agent AGENT_NODES)
+kcctl deploy [--user root] (--passwd SSH_PASSWD | --pk-file SSH_PRIVATE_KEY) (--server SERVER_NODES) (--agent AGENT_NODES)
 ```
 
 * 3）使用 kcctl 或控制台创建 K8S 集群
@@ -372,4 +392,4 @@ kcctl create cluster (--name CLUSTER_NAME) (--master NODES) [--worker NODES][ --
 
 
 
-> 如果觉得体验还不错的话，请不要吝啬你的 star ，[KubeClipper](https://github.com/kubeclipper-labs) 还处于快速成长阶段，欢迎大家积极参与~
+> 如果觉得体验还不错的话，请不要吝啬你的 star ，[KubeClipper](https://github.com/kubeclipper) 还处于快速成长阶段，欢迎大家积极参与~
