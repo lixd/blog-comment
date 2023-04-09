@@ -76,7 +76,7 @@ ssh -N -L 8888:localhost:8888 root@172.20.148.199
 
 - “-L选项”：local，表示使用本地端口转发创建 ssh 隧道
 
-- 8888:localhost:8888：本地的 8888 端口会被转发到 localhost:8888 端口上去。
+- 8888:localhost:8888：远端的 8888 端口会被转发到 localhost:8888 端口上去。
   - 这里的 localhost 实际上指监听本地回环地址，如果要监听其他 IP 也可以手动指定
 
 - root@172.20.148.199：我们创建的 ssh 隧道是连接到 172.20.148.199 上的 root 用户的
@@ -277,5 +277,4 @@ sshServer 上的 forwardingPort 将会被监听，访问 sshServer 上的 forwar
 [SSH Tunneling: Examples, Command, Server Config](https://www.ssh.com/academy/ssh/tunneling-example)
 
 [ssh端口转发：ssh隧道](https://www.zsythink.net/archives/2450)
-
 
