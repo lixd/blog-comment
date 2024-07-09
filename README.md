@@ -2,6 +2,8 @@
 
 本仓库用于存储记录个人博客评论，使用 Giscus 系统。
 
+具体教程在这里 --> [Hugo 博客引入 Giscus 评论系统](https://www.lixueduan.com/posts/blog/02-add-giscus-comment/)
+
 
 
 ## 在线预览
